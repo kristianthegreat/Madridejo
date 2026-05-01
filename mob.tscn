@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://cauwljo33bm53"]
+
+[ext_resource type="Script" uid="uid://bly86737qij1k" path="res://mob.gd" id="1_gfurk"]
+[ext_resource type="Texture2D" uid="uid://ck0q66prq5gvm" path="res://Laser_Beam_16x3.png" id="2_p11y5"]
+[ext_resource type="Texture2D" uid="uid://cdotscqts7dxn" path="res://CAKE.png" id="3_s5nov"]
+[ext_resource type="Texture2D" uid="uid://dynk43k1lat6d" path="res://Steak.png" id="4_b3mxk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1qmh0"]
+atlas = ExtResource("2_p11y5")
+region = Rect2(0, 0, 48, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gfurk"]
+atlas = ExtResource("2_p11y5")
+region = Rect2(0, 16, 48, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ieysi"]
+atlas = ExtResource("2_p11y5")
+region = Rect2(0, 32, 48, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_yscv0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1qmh0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gfurk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ieysi")
+}],
+"loop": true,
+"name": &"Fly",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_s5nov")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_b3mxk")
+}],
+"loop": true,
+"name": &"Hover",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p11y5"]
+radius = 16.5
+height = 54.0
+
+[node name="Mob" type="RigidBody2D" unique_id=763334515]
+collision_mask = 0
+gravity_scale = 0.0
+script = ExtResource("1_gfurk")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=238582019 groups=["mobs"]]
+position = Vector2(1.9999994, 0)
+scale = Vector2(0.96875, 1)
+sprite_frames = SubResource("SpriteFrames_yscv0")
+animation = &"Hover"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1266274526 groups=["mobs"]]
+position = Vector2(2, 10)
+shape = SubResource("CapsuleShape2D_p11y5")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=1344429384]
+rect = Rect2(-14, -16, 32, 43)
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://dqx2iftcl36fx"]
+
+[ext_resource type="Script" uid="uid://b2ue3gfak1fvt" path="res://main.gd" id="1_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://btcs343ci474m" path="res://player.tscn" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://cauwljo33bm53" path="res://mob.tscn" id="2_h2yge"]
+[ext_resource type="PackedScene" uid="uid://dihrxeowxyt8f" path="res://hud.tscn" id="4_1bvp3"]
+[ext_resource type="AudioStream" uid="uid://cpcal6j4f6gws" path="res://Envici November - Original Instrument.mp3" id="5_7mycd"]
+[ext_resource type="AudioStream" uid="uid://7blrgecyl5v2" path="res://Arcade Retro Game Over - Sound Effect (Final Cut) [FVJJKIJWKdc].mp3" id="6_272bh"]
+
+[sub_resource type="Curve2D" id="Curve2D_0xm2m"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 480, 0, 0, 0, 0, 0, 480, 720, 0, 0, 0, 0, 0, 720, 0, 0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[node name="Main" type="Node" unique_id=466634101]
+script = ExtResource("1_0xm2m")
+mob_scene = ExtResource("2_h2yge")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1600029196]
+offset_right = 480.0
+offset_bottom = 720.0
+color = Color(3.3691526e-07, 0.6749074, 0.4399176, 1)
+
+[node name="Player" parent="." unique_id=1628346677 instance=ExtResource("1_ig7tw")]
+position = Vector2(240, 336)
+
+[node name="MobTimer" type="Timer" parent="." unique_id=1298397786]
+wait_time = 0.5
+
+[node name="ScoreTimer" type="Timer" parent="." unique_id=1426821963]
+
+[node name="StartTimer" type="Timer" parent="." unique_id=1542548696]
+wait_time = 2.0
+one_shot = true
+
+[node name="StartPosition" type="Marker2D" parent="." unique_id=1337535346]
+position = Vector2(240, 450)
+
+[node name="MobPath" type="Path2D" parent="." unique_id=1553198327]
+curve = SubResource("Curve2D_0xm2m")
+
+[node name="MobSpawn" type="PathFollow2D" parent="MobPath" unique_id=1659437800]
+
+[node name="HUD" parent="." unique_id=44947415 instance=ExtResource("4_1bvp3")]
+
+[node name="Music" type="AudioStreamPlayer2D" parent="." unique_id=1243028181]
+position = Vector2(244, 340)
+stream = ExtResource("5_7mycd")
+autoplay = true
+
+[node name="GameOver" type="AudioStreamPlayer2D" parent="." unique_id=1719393020]
+position = Vector2(244, 340)
+stream = ExtResource("6_272bh")
+
+[connection signal="hit" from="Player" to="." method="game_over"]
+[connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
+[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
+[connection signal="start_game" from="HUD" to="." method="new_game"]
